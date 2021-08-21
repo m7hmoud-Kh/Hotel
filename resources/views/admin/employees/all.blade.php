@@ -9,7 +9,7 @@
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 @endsection
 @section('title')
-Employees
+    Employees
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
@@ -28,14 +28,13 @@ Employees
     <div class="row">
 
 
-    <!--table section-->
+        <!--table section-->
         <!--div-->
         <div class="col-xl-12">
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
-                            data-toggle="modal" href="#modaldemo8">Add Section</a>
+                        <a class="btn btn-outline-primary btn-block" href="/employees/add">Add Employee</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -45,18 +44,46 @@ Employees
                                 <tr>
                                     <th class="border-bottom-0">#</th>
                                     <th class="border-bottom-0">name</th>
-                                    <th class="border-bottom-0">description</th>
+                                    <th class="border-bottom-0">image</th>
+                                    <th class="border-bottom-0">job description</th>
+                                    <th class="border-bottom-0">contact address</th>
+                                    <th class="border-bottom-0">salay</th>
                                     <th class="border-bottom-0">opertions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $count = 0;
+                                @endphp
+                                @foreach ($allemployees as $employee)
                                     <tr>
-                                        <td>hello</td>
-                                        <td>name</td>
-                                        <td>employee</td>
-                                        <td>check</td>
-                                    </tr>
+                                        <td>{{ ++$count }}</td>
+                                        <td>{{ $employee->fname }} {{ $employee->lname }}</td>
+                                        <td> <img src="{{ asset("/images/employee/$employee->id/$employee->image") }}"
+                                                alt="image_employee" style='width:100px;height:100px'></td>
+                                        <td>{{ $employee->job_des->name }}</td>
+                                        <td>{{ $employee->contact_address }}</td>
+                                        <td>{{ $employee->salay }}</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button aria-expanded="false" aria-haspopup="true"
+                                                    class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+                                                    type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
+                                                <div class="dropdown-menu tx-13">
 
+                                                    <a class="dropdown-item" href="">                                                        <i class="fas fa-edit text-primary"></i>
+                                                        Edit Employee</a>
+
+                                                    <a class="dropdown-item" href="#" data-toggle="modal">
+                                                        <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
+                                                        Delete Employees</a>
+                                                        
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -91,7 +118,5 @@ Employees
     <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
-
-    <script src="{{ URL::asset('assets/js/modal.js') }}"></script>
 
 @endsection

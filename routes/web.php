@@ -31,5 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'employees'], function () {
         Route::get('/all', [EMP, 'index']);
+        Route::get('/add',[EMP,'add']);
+        Route::post('/store',[EMP,'store']);
     });
 });
