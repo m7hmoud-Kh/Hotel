@@ -1,6 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+
+
+define('EMP', App\Http\Controllers\Admin\EmployeesController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +20,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+    Route::group(['prefix' => 'employees'], function () {
+        Route::get('/all', [EMP, 'index']);
+    });
 });
