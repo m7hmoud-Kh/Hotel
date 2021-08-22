@@ -27,6 +27,15 @@
     <!-- row -->
     <div class="row">
 
+        @if (Session()->has('delete'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ Session()->get('delete') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
 
         <!--table section-->
         <!--div-->
@@ -71,16 +80,17 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="">                                                        <i class="fas fa-edit text-primary"></i>
+                                                    <a class="dropdown-item" href="/employees/edit/{{$employee->id}}"> <i
+                                                            class="fas fa-edit text-primary"></i>
                                                         Edit Employee</a>
 
-                                                    <a class="dropdown-item" href="#" data-toggle="modal">
+                                                    <a class="dropdown-item" href="#delete_invoice" data-toggle="modal"
+                                                        data-name='{{ $employee->fname }} {{ $employee->lname }}'
+                                                        data-employee_id="{{$employee->id}}">
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
-                                                        Delete Employees</a>
-                                                        
+                                                        Delete Employee</a>
                                                 </div>
                                             </div>
-
                                         </td>
                                     </tr>
                                 @endforeach
@@ -91,6 +101,48 @@
             </div>
         </div>
         <!--/div-->
+
+
+
+
+        <!-- Delete Invoices  -->
+        <div class="modal fade" id="delete_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Delete Employee</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/employees/delete" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <input type="hidden" name="employee_id" id="employee_id" value="">
+                            <input type="text" name="name" id="name" value="" readonly>
+                            Are You Sure for Delete Employee
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
     <!-- row closed -->
     </div>
@@ -118,5 +170,19 @@
     <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
+
+
+    <script>
+        $('#delete_invoice').on('show.bs.modal',function(e){
+            var button = $(e.relatedTarget);
+            var name = button.data('name');
+            var employee_id = button.data('employee_id');
+
+            var modal = $(this);
+            modal.find('.modal-body #name').val(name);
+            modal.find('.modal-body #employee_id').val(employee_id);
+
+        });
+    </script>
 
 @endsection

@@ -7,6 +7,9 @@ use App\Models\Employees;
 use App\Models\JobDescription;
 use Illuminate\Http\Request;
 use com;
+use Illuminate\Queue\Jobs\RedisJob;
+use Illuminate\Support\Facades\Storage;
+use PDO;
 
 class EmployeesController extends Controller
 {
@@ -29,7 +32,7 @@ class EmployeesController extends Controller
     public function store(Request $request)
     {
         // validate data
-        $request->validate($this->rules());
+        $request->validate($this->rules(), $this->messages());
         $file_name = $this->generationFileName($request->pic);
         Employees::create([
             'fname' => $request->fname,
@@ -43,6 +46,65 @@ class EmployeesController extends Controller
         return redirect()->back()->with(['success' => 'Employee Added successfully']);
     }
 
+
+    public function delete(Request $request)
+    {
+        $employee  =  $this->findOrNot($request->employee_id);
+        if ($employee) {
+            Storage::disk('employess')->deleteDirectory($request->employee_id);
+            $employee->delete();
+            return redirect()->back()->with([
+                'delete' => 'Employee deleted successfully'
+            ]);
+        }
+    }
+
+    public function edit($id)
+    {
+        $jobs =  JobDescription::all();
+        $employee = $this->findOrNot($id);
+        return view('admin.employees.update', compact('jobs', 'employee'));
+    }
+
+    public function update(Request $request)
+    {
+        // validate data
+        $request->validate($this->rules_update($request->id),$this->messages());
+
+        $employee = $this->findOrNot($request->id);
+        if ($employee) {
+            if ($this->checkImageOrNot($request->pic)) {
+                $file_name = $this->generationFileName($request->pic);
+
+                $employee->update([
+                    'job_id' => $request->job,
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'contact_address' => $request->address,
+                    'salay' => $request->salay,
+                    'image' => $file_name,
+                ]);
+
+                // delete old image
+                Storage::disk('employess')->delete($request->id.'\\'.$request->old_image);
+
+                // add new image in localStorage
+                $path = self::PATH . $request->id . '\\';
+                $request->pic->move(public_path($path),$file_name);
+
+            } else {
+                $employee->update([
+                    'job_id' => $request->job,
+                    'fname' => $request->fname,
+                    'lname' => $request->lname,
+                    'contact_address' => $request->address,
+                    'salay' => $request->salay,
+                ]);
+            }
+            return redirect()->back()->with(['success' => 'Employee Update successfully']);
+        }
+    }
+
     private function rules()
     {
         return [
@@ -51,6 +113,27 @@ class EmployeesController extends Controller
             'job' => 'required',
             'salay' => 'required|numeric|max:10000',
             'address' => 'required',
+            'image' => 'mimes:jpg,png'
+        ];
+    }
+
+    private function rules_update($id)
+    {
+        return [
+            'fname' => 'required|unique:employees,fname,'.$id,
+            'lname' => 'required',
+            'job' => 'required',
+            'salay' => 'required|numeric|max:10000',
+            'address' => 'required',
+            'image' => 'mimes:jpg,png'
+        ];
+    }
+
+
+    private function messages()
+    {
+        return [
+            'image.mimes' => 'must upload only image',
         ];
     }
 
@@ -66,5 +149,20 @@ class EmployeesController extends Controller
     {
         $file_ex = $image->getClientOriginalExtension();
         return time() . '.' . $file_ex;
+    }
+
+    private function findOrNot($id)
+    {
+        $employee = Employees::find($id);
+        if ($employee) {
+            return $employee;
+        } else {
+            return false;
+        }
+    }
+
+    private function checkImageOrNot($image)
+    {
+        return $image ? true : false;
     }
 }

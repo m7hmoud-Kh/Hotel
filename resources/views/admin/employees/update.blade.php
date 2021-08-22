@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css') }}">
 @endsection
 @section('title')
-    Add Employee
+    Edit Employee
 @stop
 
 @section('page-header')
@@ -21,7 +21,7 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto">Employees</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    Add Employee</span>
+                    Edit Employee</span>
             </div>
         </div>
     </div>
@@ -60,18 +60,22 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="/employees/store" method="post" enctype="multipart/form-data">
+                    <form action="/employees/update" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col">
+                                <input type="hidden" name="id" value="{{$employee->id}}">
+
+                                <input type="hidden" name="old_image" value="{{$employee->image}}">
+
                                 <label for="fname" class="control-label">First Name</label>
-                                <input type="text" class="form-control" id="fname" name="fname"
+                                <input type="text" class="form-control" id="fname" name="fname" value="{{$employee->fname}}"
                                     title="enter the first name">
                             </div>
 
                             <div class="col">
                                 <label for="lname" class="control-label">Last Name</label>
-                                <input class="form-control" name="lname" type="text" id='lname'>
+                                <input class="form-control" name="lname" type="text" id='lname' value="{{$employee->lname}}">
                             </div>
                         </div>
 
@@ -81,18 +85,19 @@
                                 <label for="inputName" class="control-label">Job Description</label>
                                 <select name="job" class="form-control SlectBox">
                                     <!--placeholder-->
-                                    <option value="" selected disabled>select Job Description</option>
+                                    <option value="" disabled>select Job Description</option>
                                     @foreach ($jobs as $job)
-                                        <option value="{{ $job->id }}">{{ $job->name }}</option>
+                                        <option value="{{ $job->id }}" @if ($job->id == $employee->job_des->id)
+                                            selected
+                                        @endif>{{ $job->name }}</option>
                                     @endforeach
-
                                 </select>
                             </div>
 
                             <div class="col">
                                 <label for="inputName" class="control-label">Salay</label>
                                 <input type="text" class="form-control form-control-lg" id="salay" name="salay"
-                                    title="please enter salay"
+                                    title="please enter salay" value="{{$employee->salay}}"
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </div>
                         </div>
@@ -104,15 +109,17 @@
 
                             <div class="col">
                                 <label for="inputName" class="control-label">Contact-Address</label>
-                                <input type="text" class="form-control" name="address">
+                                <input type="text" class="form-control" name="address" value="{{$employee->contact_address}}">
                             </div>
 
                             <div class="col">
-                                <p class="text-danger">* Allowed Extension jpeg ,.jpg , png </p>
+                                <p class="text-danger">* Allowed Extension jpeg ,.jpg , png  </p>
+                                <code class="text-success">old image is saved if you not upload new image</code>
                                 <h5 class="card-title">Image</h5>
+
                                 <div class="col-sm-12 col-md-12">
                                     <input type="file" name="pic" class="dropify"
-                                        accept=".jpg,.png,.jpeg" data-height="70" />
+                                        accept=".jpg,.png,.jpeg,.png" data-height="70" />
                                 </div><br>
 
                             </div>
@@ -121,7 +128,7 @@
 
                         <br>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary btn-block">Add</button>
+                            <button type="submit" class="btn btn-success btn-block">Update</button>
                         </div>
 
 

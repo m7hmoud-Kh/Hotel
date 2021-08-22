@@ -33,5 +33,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/all', [EMP, 'index']);
         Route::get('/add',[EMP,'add']);
         Route::post('/store',[EMP,'store']);
+        Route::post('/delete',[EMP,'delete']);
+        Route::get('/edit/{id}',[EMP,'edit']);
+        Route::post('/update',[EMP,'update']);
     });
 });
