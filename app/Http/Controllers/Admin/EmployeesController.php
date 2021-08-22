@@ -10,17 +10,53 @@ use com;
 use Illuminate\Queue\Jobs\RedisJob;
 use Illuminate\Support\Facades\Storage;
 use PDO;
+use phpDocumentor\Reflection\Types\Self_;
 
 class EmployeesController extends Controller
 {
 
     const PATH = 'images\employee\\';
+    const RECEPTIONIST = 1;
+    const ROOM_ATTENDANT = 2;
+    const DOORMAN = 3;
+    const POTER = 4;
+    const CHEFS = 5;
 
     public function index()
     {
         $allemployees =  Employees::with('job_des')->get();
-
         return view('admin.employees.all', compact('allemployees'));
+    }
+
+    public function receptionist()
+    {
+        $allemployees =  Employees::with('job_des')->where('job_id',Self::RECEPTIONIST)->get();
+        return view('admin.employees.receptionist', compact('allemployees'));
+    }
+
+    public function room_attendant()
+    {
+        $allemployees =  Employees::with('job_des')->where('job_id',Self::ROOM_ATTENDANT)->get();
+        return view('admin.employees.room_attendant', compact('allemployees'));
+    }
+
+
+    public function doorman()
+    {
+        $allemployees =  Employees::with('job_des')->where('job_id',Self::DOORMAN)->get();
+        return view('admin.employees.doorman', compact('allemployees'));
+    }
+
+    public function poter()
+    {
+        $allemployees =  Employees::with('job_des')->where('job_id',Self::POTER)->get();
+        return view('admin.employees.poter', compact('allemployees'));
+    }
+
+    public function chefs()
+    {
+        $allemployees =  Employees::with('job_des')->where('job_id',Self::CHEFS)->get();
+        return view('admin.employees.chef', compact('allemployees'));
     }
 
     public function add()

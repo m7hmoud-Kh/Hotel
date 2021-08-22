@@ -16,12 +16,11 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Employees</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
-                </span>
+                <h4 class="content-title mb-0 my-auto">Employees</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                    Poter</span>
             </div>
         </div>
     </div>
-
     <!-- breadcrumb -->
 @endsection
 @section('content')
@@ -29,13 +28,13 @@
     <div class="row">
 
         @if (Session()->has('delete'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>{{ Session()->get('delete') }}</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ Session()->get('delete') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
 
         <!--table section-->
@@ -81,13 +80,13 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="/employees/edit/{{ $employee->id }}">
-                                                        <i class="fas fa-edit text-primary"></i>
+                                                    <a class="dropdown-item" href="/employees/edit/{{$employee->id}}"> <i
+                                                            class="fas fa-edit text-primary"></i>
                                                         Edit Employee</a>
 
                                                     <a class="dropdown-item" href="#delete_invoice" data-toggle="modal"
                                                         data-name='{{ $employee->fname }} {{ $employee->lname }}'
-                                                        data-employee_id="{{ $employee->id }}">
+                                                        data-employee_id="{{$employee->id}}">
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
                                                         Delete Employee</a>
                                                 </div>
@@ -106,7 +105,7 @@
 
 
 
-        <!-- Delete Employee  -->
+        <!-- Delete Invoices  -->
         <div class="modal fade" id="delete_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -174,7 +173,7 @@
 
 
     <script>
-        $('#delete_invoice').on('show.bs.modal', function(e) {
+        $('#delete_invoice').on('show.bs.modal',function(e){
             var button = $(e.relatedTarget);
             var name = button.data('name');
             var employee_id = button.data('employee_id');

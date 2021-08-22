@@ -19,8 +19,8 @@ class Employees extends Model
         return $this->belongsTo('App\Models\JobDescription','job_id');
     }
 
-    public function getSalayAttribute($val)
+    public function Salayformat()
     {
-        return number_format($val);
+        return number_format($this->salay) . '$';
     }
 }
