@@ -26,35 +26,21 @@ class RoomController extends Controller
     }
 
 
-
-    // i can't do validate for this image in laravel 8
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'roomtype' => 'required',
-        //     'images' => 'required',
-        // ]);
 
-        // $allowedfileExtension = ['jpeg', 'jpg', 'png'];
+        // validate don't work
+        $request->validate([
+            'roomtype' => 'required',
+            'images' => 'required',
+            'images.*' => 'mimes:png,jpg,jpeg',
+        ]);
 
-        // $files = [];
-        // if ($request->hasfile('images')) {
-        //     $images = $request->file('images');
-        //     foreach ($images as $image) {
-        //         // Getting image extension
-        //         $extension = $image->getClientOriginalExtension();
-        //         $check = in_array($extension, $allowedfileExtension);
-        //         // Checking the image extension
-        //         if (!$check) {
-        //             return redirect()->back()->with('extension', 'Images must be png, jpeg or jpg!');
-        //         }
-        //         // ...
-        //     }
-        // }else
-        // {
-        //     return 'helo';
-        // }
+        // if i upload image reuturn 'not found images' maybe function hasFile don't work 
+        if ($request->hasFile('images')) {
+            return 'found images';
+        } else {
+            return 'not found images';
+        }
     }
-
-
 }

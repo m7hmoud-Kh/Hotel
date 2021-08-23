@@ -114,8 +114,7 @@
                                 <p class="text-danger">can't upload more than 3 images</p>
                                 <h5 class="card-title">Image</h5>
                                 <div class="col-sm-12 col-md-12">
-                                    <input type="file" name="images[]" class="myfrm  dropify" accept="jpg,png,jpeg" multiple
-                                            data-height=" 70" required />
+                                    <input type="file" name="images[]" class="myfrm dropify" accept="jpg,png,jpeg" multiple data-height=" 70" required />
                                 </div><br>
 
                             </div>
