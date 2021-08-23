@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Room;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'room'], function () {
-        //comment
+        Route::get('/all',[ROOM,'index']);
+        Route::get('/add',[ROOM,'add']);
+        Route::get('/type_info/{id}',[ROOM,'type_info']);
+        Route::post('/store',[ROOM,'store']);
     });
 });
