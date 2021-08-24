@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css') }}">
 @endsection
 @section('title')
-    Add Room
+    Edit Room
 @stop
 
 @section('page-header')
@@ -20,8 +20,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Rooms</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    Add Room</span>
+                <h4 class="content-title mb-0 my-auto">Room</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                    Edit Room</span>
             </div>
         </div>
     </div>
@@ -51,14 +51,6 @@
         </div>
     @endif
 
-    @if (Session()->has('extension'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>{{ Session()->get('extension') }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endif
 
 
 
@@ -66,27 +58,38 @@
     <div class="row">
 
         <div class="col-lg-12 col-md-12">
+
             <div class="card">
+                <div class="card-header pb-0">
+                    <div class="col-sm-6 col-md-4 col-xl-3">
+                        <a class="btn btn-outline-primary btn-block" href="/room/all">Back All Room</a>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <form action="/room/store" method="POST" enctype="multipart/form-data">
+                    <form action="/room/update" method="post" enctype="multipart/form-data">
                         @csrf
-                        {{-- 2 --}}
                         <div class="row">
                             <div class="col">
+                                <input type="hidden" name="room_id" value="{{ $all_info_about_room->id }}">
+                                <input type="hidden" name='image_id' value="{{ $all_info_about_room->images_id }}">
                                 <label for="inputName" class="control-label">Room Type</label>
                                 <select name="roomtype" id="roomtype" class="form-control SlectBox" required>
                                     <!--placeholder-->
                                     <option value="" selected disabled>select Room Type</option>
                                     @foreach ($roomTypes as $roomType)
-                                        <option value="{{ $roomType->id }}">{{ $roomType->type }}</option>
+                                        <option value="{{ $roomType->id }}" @if ($roomType->id == $all_info_about_room->type_id)
+                                            selected
+                                    @endif
+                                    >{{ $roomType->type }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="col">
                                 <label for="inputName" class="control-label">Price</label>
-                                <input type="text" class="form-control form-control-lg" id="price" name="price" value=""
-                                    readonly title="please enter price"
+                                <input type="text" class="form-control form-control-lg" id="price" name="price"
+                                    value=" {{ $all_info_about_room->roomtype->price }}" readonly
+                                    title="please enter price"
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </div>
                         </div>
@@ -104,7 +107,7 @@
                             <div class="col">
                                 <label for="exampleTextarea">description</label>
                                 <textarea class="form-control" id="exampleTextarea" name="description" rows="3"
-                                    readonly></textarea>
+                                    readonly> {{ $all_info_about_room->roomtype->description }} </textarea>
                             </div>
                         </div>
 
@@ -112,9 +115,11 @@
                             <div class="col">
                                 <p class="text-danger">* Allowed Extension jpeg ,.jpg , png </p>
                                 <p class="text-danger">can't upload more than 3 images</p>
+                                <p class="text-success">if you not upload image old image is saved</p>
                                 <h5 class="card-title">Image</h5>
                                 <div class="col-sm-12 col-md-12">
-                                    <input type="file" name="images[]" class="myfrm dropify" multiple accept="jpg,png,jpeg"  data-height=" 70" required />
+                                    <input type="file" name="images[]" class="myfrm dropify" multiple accept="jpg,png,jpeg"
+                                        data-height=" 70" />
                                 </div><br>
 
                             </div>
@@ -123,7 +128,7 @@
 
                         <br>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary btn-block">Add</button>
+                            <button type="submit" class="btn btn-success btn-block">Update</button>
                         </div>
 
 

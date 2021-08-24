@@ -9,19 +9,18 @@
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 @endsection
 @section('title')
-    Employees
+    Rooms
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Employees</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
+                <h4 class="content-title mb-0 my-auto">Rooms</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
                 </span>
             </div>
         </div>
     </div>
-
     <!-- breadcrumb -->
 @endsection
 @section('content')
@@ -44,7 +43,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/employees/add">Add Employee</a>
+                        <a class="btn btn-outline-primary btn-block" href="/room/add">Add Room</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -53,11 +52,9 @@
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0">#</th>
-                                    <th class="border-bottom-0">name</th>
-                                    <th class="border-bottom-0">image</th>
-                                    <th class="border-bottom-0">job description</th>
-                                    <th class="border-bottom-0">contact address</th>
-                                    <th class="border-bottom-0">salay</th>
+                                    <th class="border-bottom-0">Type</th>
+                                    <th class="border-bottom-0">description</th>
+                                    <th class="border-bottom-0">Price</th>
                                     <th class="border-bottom-0">opertions</th>
                                 </tr>
                             </thead>
@@ -65,15 +62,12 @@
                                 @php
                                     $count = 0;
                                 @endphp
-                                @foreach ($allemployees as $employee)
+                                @foreach ($allRoomType as $type)
                                     <tr>
                                         <td>{{ ++$count }}</td>
-                                        <td>{{ $employee->fname }} {{ $employee->lname }}</td>
-                                        <td> <img src="{{ asset("/images/employee/$employee->id/$employee->image") }}"
-                                                alt="image_employee" style='width:100px;height:100px'></td>
-                                        <td>{{ $employee->job_des->name }}</td>
-                                        <td>{{ $employee->contact_address }}</td>
-                                        <td>{{ $employee->Salayformat() }}</td>
+                                        <td>{{ $type->type }}</td>
+                                        <td>{{ $type->description }}</td>
+                                        <td>{{ $type->changeFormatPrice() }}</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button aria-expanded="false" aria-haspopup="true"
@@ -81,15 +75,13 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="/employees/edit/{{ $employee->id }}">
+                                                    <a class="dropdown-item" href="">
                                                         <i class="fas fa-edit text-primary"></i>
-                                                        Edit Employee</a>
+                                                        Edit Room</a>
 
-                                                    <a class="dropdown-item" href="#delete_employee" data-toggle="modal"
-                                                        data-name='{{ $employee->fname }} {{ $employee->lname }}'
-                                                        data-employee_id="{{ $employee->id }}">
+                                                    <a class="dropdown-item" href="#delete_room" data-toggle="modal">
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
-                                                        Delete Employee</a>
+                                                        Delete Room</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -107,22 +99,22 @@
 
 
         <!-- Delete Employee  -->
-        <div class="modal fade" id="delete_employee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="delete_room" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Delete Employee</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> Delete Room</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/employees/delete" method="post">
+                    <form action="/room/delete" method="post">
                         @csrf
                         <div class="modal-body">
-                            <input type="hidden" name="employee_id" id="employee_id" value="">
-                            <input type="text" name="name" id="name" value="" readonly>
-                            Are You Sure for Delete Employee
+                            Are You Sure for Delete Room With RoomId:
+                            <input type="text" name="room_id" id="room_id" value="" readonly>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
@@ -132,17 +124,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
 
     </div>
     <!-- row closed -->
@@ -174,15 +155,21 @@
 
 
     <script>
-        $('#delete_employee').on('show.bs.modal', function(e) {
+        $('#delete_room').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
-            var name = button.data('name');
-            var employee_id = button.data('employee_id');
+            var room_id = button.data('id');
 
             var modal = $(this);
-            modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #employee_id').val(employee_id);
+            modal.find('.modal-body #room_id').val(room_id);
+        });
 
+
+        $('#room_status').on('show.bs.modal', function(e) {
+            var button = $(e.relatedTarget);
+            var room_id = button.data('id');
+
+            var modal = $(this);
+            modal.find('.modal-body #room_id').val(room_id);
         });
     </script>
 

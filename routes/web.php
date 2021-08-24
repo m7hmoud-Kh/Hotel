@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 define('EMP', App\Http\Controllers\Admin\EmployeesController::class);
 define('ROOM', App\Http\Controllers\Admin\RoomController::class);
+define('TYPE_ROOM', App\Http\Controllers\Admin\RoomTypeController::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -46,9 +48,17 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'room'], function () {
-        Route::get('/all',[ROOM,'index']);
-        Route::get('/add',[ROOM,'add']);
-        Route::get('/type_info/{id}',[ROOM,'type_info']);
-        Route::post('/store',[ROOM,'store']);
+        Route::get('/all', [ROOM, 'index']);
+        Route::get('/add', [ROOM, 'add']);
+        Route::get('/type_info/{id}', [ROOM, 'type_info']);
+        Route::post('/store', [ROOM, 'store']);
+        Route::post('/delete', [ROOM, 'delete']);
+        Route::get('/edit/{id}', [ROOM, 'edit']);
+        Route::post('/update', [ROOM, 'update']);
+        Route::post('/change_status_room', [ROOM, 'change_status_room']);
+    });
+
+    Route::group(['prefix' => 'room_type'], function () {
+        Route::get('/all', [TYPE_ROOM, 'index']);
     });
 });

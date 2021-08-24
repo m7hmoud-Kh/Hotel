@@ -13,8 +13,13 @@ class RoomImage extends Model
     protected $fillable = ['filenames'];
 
 
-    public function setFilenamesAttribute($val)
+    public function setFileNamesAttribute($val)
     {
         $this->attributes['filenames'] = json_encode($val);
+    }
+
+    public function room()
+    {
+        return $this->hasMany('App\Models\Room');
     }
 }

@@ -61,15 +61,47 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>55</td>
-                                    <td>single</td>
-                                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit ipsa ratione sunt autem nam. Ratione officiis dignissimos mollitia excepturi assumenda voluptate culpa reprehenderit ut aut eligendi, laboriosam quisquam, laudantium sed?</td>
-                                    <td>5,660</td>
-                                    <td>reverstion</td>
-                                    <td></td>
-                                </tr>
+                                @php
+                                    $count = 0;
+                                @endphp
+                                @foreach ($all_room as $room)
+                                    <tr>
+                                        <td>{{ ++$count }}</td>
+                                        <td>{{ $room->id }}</td>
+                                        <td>{{ $room->roomtype->type }}</td>
+                                        <td>{{ $room->roomtype->description }}</td>
+                                        <td>{{ $room->roomtype->changeFormatPrice() }}</td>
+                                        <td>{!! $room->status !!}</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button aria-expanded="false" aria-haspopup="true"
+                                                    class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+                                                    type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
+                                                <div class="dropdown-menu tx-13">
+
+                                                    <a class="dropdown-item" href="/room/edit/{{ $room->id }}">
+                                                        <i class="fas fa-edit text-primary"></i>
+                                                        Edit Room</a>
+
+                                                    <a class="dropdown-item" href="#delete_room" data-toggle="modal"
+                                                        data-id="{{ $room->id }}">
+                                                        <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
+                                                        Delete Room</a>
+
+
+                                                    <a class="dropdown-item" data-toggle="modal"
+                                                    data-id="{{ $room->id }}"
+                                                        data-target="#room_status"><i
+                                                            class=" text-success fas fa-money-bill"></i>&nbsp;&nbsp;
+                                                        Room Status
+                                                    </a>
+
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -82,22 +114,22 @@
 
 
         <!-- Delete Employee  -->
-        <div class="modal fade" id="delete_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="delete_room" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Delete Employee</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> Delete Room</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/employees/delete" method="post">
+                    <form action="/room/delete" method="post">
                         @csrf
                         <div class="modal-body">
-                            <input type="hidden" name="employee_id" id="employee_id" value="">
-                            <input type="text" name="name" id="name" value="" readonly>
-                            Are You Sure for Delete Employee
+                            Are You Sure for Delete Room With RoomId:
+                            <input type="text" name="room_id" id="room_id" value="" readonly>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
@@ -107,6 +139,40 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="modal fade" id="room_status" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Room Status </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/room/change_status_room" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" value="" id="room_id" name="room_id">
+                        <label for="inputName" class="control-label">Select Room Status</label>
+                        <select name="payment_status" class="form-control SlectBox" required>
+                            <option value="" selected disabled>select Status</option>
+                            <option value="1">Not Reservation</option>
+                            <option value="2">Reservation</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
 
 
 
@@ -149,16 +215,24 @@
 
 
     <script>
-        $('#delete_invoice').on('show.bs.modal', function(e) {
+        $('#delete_room').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
-            var name = button.data('name');
-            var employee_id = button.data('employee_id');
+            var room_id = button.data('id');
 
             var modal = $(this);
-            modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #employee_id').val(employee_id);
-
+            modal.find('.modal-body #room_id').val(room_id);
         });
+
+
+        $('#room_status').on('show.bs.modal',function(e){
+            var button = $(e.relatedTarget);
+            var room_id = button.data('id');
+
+            var modal = $(this);
+            modal.find('.modal-body #room_id').val(room_id);
+        });
+
+
     </script>
 
 @endsection

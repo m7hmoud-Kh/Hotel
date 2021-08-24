@@ -9,10 +9,16 @@ class Roomtype extends Model
 {
     use HasFactory;
     protected $table = 'roomtypes';
-    protected $fillable = ['type','description'];
+    protected $fillable = ['type','description','price'];
 
     public function room()
     {
         return $this->hasMany('App\Models\Room');
     }
+
+    public function changeFormatPrice()
+    {
+        return  '$ ' .number_format($this->price,2) ;
+    }
+
 }
