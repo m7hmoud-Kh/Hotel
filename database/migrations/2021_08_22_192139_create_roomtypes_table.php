@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateRoomtypesTable extends Migration
 {
-    use SoftDeletes;
     /**
      * Run the migrations.
      *

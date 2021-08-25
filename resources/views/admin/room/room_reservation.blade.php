@@ -9,14 +9,14 @@
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 @endsection
 @section('title')
-    Rooms Type
+    Rooms Reservations
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Rooms Type</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
+                <h4 class="content-title mb-0 my-auto">Rooms</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ Reservations
                 </span>
             </div>
         </div>
@@ -28,18 +28,8 @@
     <div class="row">
 
         @if (Session()->has('delete'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>{{ Session()->get('delete') }}</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
-
-        @if (Session()->has('archive'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>{{ Session()->get('archive') }}</strong>
+                <strong>{{ Session()->get('delete') }}</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -53,7 +43,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/room_type/add">Add Room Type</a>
+                        <a class="btn btn-outline-primary btn-block" href="/room/add">Add Room</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -62,10 +52,11 @@
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0">#</th>
-                                    <th class="border-bottom-0">Type</th>
+                                    <th class="border-bottom-0">Room Id</th>
+                                    <th class="border-bottom-0">Room Type</th>
                                     <th class="border-bottom-0">description</th>
                                     <th class="border-bottom-0">Price</th>
-                                    <th class="border-bottom-0">Count Room</th>
+                                    <th class="border-bottom-0">Status</th>
                                     <th class="border-bottom-0">opertions</th>
                                 </tr>
                             </thead>
@@ -73,13 +64,14 @@
                                 @php
                                     $count = 0;
                                 @endphp
-                                @foreach ($allRoomType as $type)
+                                @foreach ($all_room as $room)
                                     <tr>
                                         <td>{{ ++$count }}</td>
-                                        <td>{{ $type->type }}</td>
-                                        <td>{{ $type->description }}</td>
-                                        <td>{{ $type->changeFormatPrice() }}</td>
-                                        <td>{{ $type->count_room }}</td>
+                                        <td>{{ $room->id }}</td>
+                                        <td>{{ $room->roomtype->type }}</td>
+                                        <td>{{ $room->roomtype->description }}</td>
+                                        <td>{{ $room->roomtype->changeFormatPrice() }}</td>
+                                        <td>{!! $room->status !!}</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button aria-expanded="false" aria-haspopup="true"
@@ -87,23 +79,25 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="/room_type/edit/{{ $type->id }}">
+                                                    <a class="dropdown-item" href="/room/edit/{{ $room->id }}">
                                                         <i class="fas fa-edit text-primary"></i>
-                                                        Edit Room Type</a>
+                                                        Edit Room</a>
 
                                                     <a class="dropdown-item" href="#delete_room" data-toggle="modal"
-                                                        data-id="{{ $type->id }}">
+                                                        data-id="{{ $room->id }}"
+                                                        data-room_type_id="{{$room->roomtype->id}}"
+                                                        >
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
-                                                        Delete Room Type</a>
+                                                        Delete Room</a>
 
 
-
-                                                    <a class="dropdown-item" href="#Transfer_room_type" data-toggle="modal"
-                                                    data-id="{{ $type->id }}"
-                                                        data-target="#Transfer_room_type">
-                                                        <i class="text-warning fas fa-exchange-alt"></i>&nbsp;&nbsp;
-                                                        Archive Type Room
+                                                    <a class="dropdown-item" data-toggle="modal"
+                                                    data-id="{{ $room->id }}"
+                                                        data-target="#room_status"><i
+                                                            class=" text-success fas fa-money-bill"></i>&nbsp;&nbsp;
+                                                        Room Status
                                                     </a>
+
 
                                                 </div>
                                             </div>
@@ -127,16 +121,17 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Delete Room Type</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> Delete Room</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room_type/delete" method="post">
+                    <form action="/room/delete" method="post">
                         @csrf
                         <div class="modal-body">
-                            Are You Sure for Delete Room Type:
-                            <input type="text" name="type_id" id="type_id" value="" readonly>
+                            Are You Sure for Delete Room With RoomId:
+                            <input type="text" name="room_id" id="room_id" value="" readonly>
+                            <input type="hidden" name="room_type_id" id="room_type_id" value="">
 
                         </div>
                         <div class="modal-footer">
@@ -149,32 +144,49 @@
         </div>
 
 
-        {{-- Archive Room type --}}
-
-        <div class="modal fade" id="Transfer_room_type" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Archive Room Type</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="/room_type/Archive" method="post">
-                        @csrf
-                        <div class="modal-body">
-                            Are You Sure for Archive Room Type
-                            <input type="text" name="type_id" id="type_id" value="" readonly>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
-                            <button type="submit" class="btn btn-primary">Archive</button>
-                        </div>
-                    </form>
+        <div class="modal fade" id="room_status" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Room Status </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <form action="/room/change_status_room" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" value="" id="room_id" name="room_id">
+                        <label for="inputName" class="control-label">Select Room Status</label>
+                        <select name="payment_status" class="form-control SlectBox" required>
+                            <option value="" selected disabled>select Status</option>
+                            <option value="1">Not Reservation</option>
+                            <option value="2">Reservation</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     </div>
     <!-- row closed -->
@@ -209,18 +221,24 @@
         $('#delete_room').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
             var room_id = button.data('id');
+            var room_type_id = button.data('room_type_id');
 
             var modal = $(this);
-            modal.find('.modal-body #type_id').val(room_id);
+            modal.find('.modal-body #room_id').val(room_id);
+            modal.find('.modal-body #room_type_id').val(room_type_id);
+
         });
 
-        $('#Transfer_room_type').on('show.bs.modal',function(e){
+
+        $('#room_status').on('show.bs.modal',function(e){
             var button = $(e.relatedTarget);
             var room_id = button.data('id');
 
             var modal = $(this);
-            modal.find(".modal-body #type_id").val(room_id);
+            modal.find('.modal-body #room_id').val(room_id);
         });
+
+
     </script>
 
 @endsection

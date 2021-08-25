@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\admin;
 
-use com;
-use App\Models\Room;
 use App\Models\Roomtype;
-use Faker\Provider\Lorem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\admin\RoomController;
 
 class RoomTypeController extends Controller
 {
@@ -58,8 +54,45 @@ class RoomTypeController extends Controller
 
     public function delete(Request $request)
     {
-        return $request;
+        $type = $this->findOrNot($request->type_id);
+        if ($type) {
+            $type->forceDelete();
+            return redirect()->back()->with(['delete' => 'Room Type is Deleted All']);
+        }
     }
+
+
+    public function Archive(Request $request)
+    {
+        $type = $this->findOrNot($request->type_id);
+        if ($type) {
+            $type->Delete();
+            return redirect()->back()->with(['archive' => 'Room Type is Archive']);
+        }
+    }
+
+
+    public function all_archive()
+    {
+        $allRoomType = Roomtype::onlyTrashed()->get();
+        return view('admin.room_type.all_archive', compact('allRoomType'));
+    }
+
+    public function cancel_archive(Request $request)
+    {
+        Roomtype::onlyTrashed()->where('id', $request->type_id)->restore();
+        return redirect()->back()->with(['archive' => 'Room Type is Not Archive']);
+    }
+
+    public function delete_archive(Request $request)
+    {
+        $room_type = Roomtype::onlyTrashed()->where('id', $request->type_id);
+        if ($room_type) {
+            $room_type->forceDelete();
+            return redirect()->back()->with(['delete' => 'Room Type is Deleted All']);
+        }
+    }
+
 
 
     private function rules()

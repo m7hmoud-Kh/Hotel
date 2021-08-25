@@ -9,14 +9,15 @@
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 @endsection
 @section('title')
-    Rooms Type
+    Archive Rooms Type
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Rooms Type</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
+                <h4 class="content-title mb-0 my-auto">Rooms Type</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                    Archive
                 </span>
             </div>
         </div>
@@ -53,7 +54,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/room_type/add">Add Room Type</a>
+                        <a class="btn btn-outline-primary btn-block" href="/room_type/all">Back to Room Type</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -87,10 +88,6 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="/room_type/edit/{{ $type->id }}">
-                                                        <i class="fas fa-edit text-primary"></i>
-                                                        Edit Room Type</a>
-
                                                     <a class="dropdown-item" href="#delete_room" data-toggle="modal"
                                                         data-id="{{ $type->id }}">
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
@@ -99,10 +96,9 @@
 
 
                                                     <a class="dropdown-item" href="#Transfer_room_type" data-toggle="modal"
-                                                    data-id="{{ $type->id }}"
-                                                        data-target="#Transfer_room_type">
+                                                        data-id="{{ $type->id }}" data-target="#Transfer_room_type">
                                                         <i class="text-warning fas fa-exchange-alt"></i>&nbsp;&nbsp;
-                                                        Archive Type Room
+                                                        cancel Archive
                                                     </a>
 
                                                 </div>
@@ -132,7 +128,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room_type/delete" method="post">
+                    <form action="/room_type/delete_archive" method="post">
                         @csrf
                         <div class="modal-body">
                             Are You Sure for Delete Room Type:
@@ -156,20 +152,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Archive Room Type</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> cancel Archive Room Type</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room_type/Archive" method="post">
+                    <form action="/room_type/cancel_archive" method="post">
                         @csrf
                         <div class="modal-body">
-                            Are You Sure for Archive Room Type
+                            Are You Sure for cancel Archive Room Type
                             <input type="text" name="type_id" id="type_id" value="" readonly>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
-                            <button type="submit" class="btn btn-primary">Archive</button>
+                            <button type="submit" class="btn btn-primary">Cancel Archive</button>
                         </div>
                     </form>
                 </div>
@@ -214,7 +210,7 @@
             modal.find('.modal-body #type_id').val(room_id);
         });
 
-        $('#Transfer_room_type').on('show.bs.modal',function(e){
+        $('#Transfer_room_type').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
             var room_id = button.data('id');
 
