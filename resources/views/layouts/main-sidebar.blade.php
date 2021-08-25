@@ -54,7 +54,7 @@
 							<li><a class="slide-item" href="/room/all">All</a></li>
 							<li><a class="slide-item" href="">Not Reservation Rooms</a></li>
 							<li><a class="slide-item" href="">Reservation Rooms</a></li>
-							<li><a class="slide-item" href="/room_type/all">Type</a></li>
+							<li><a class="slide-item" href="/room_type/all">Type Room</a></li>
 							<li><a class="slide-item" href="{{ url('/' . $page='contacts') }}">Contacts</a></li>
 							<li><a class="slide-item" href="{{ url('/' . $page='image-compare') }}">Image-compare</a></li>
 							<li><a class="slide-item" href="{{ url('/' . $page='notification') }}">Notification</a></li>

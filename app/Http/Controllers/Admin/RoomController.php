@@ -43,6 +43,7 @@ class RoomController extends Controller
         $this->store_room($request->roomtype, $id);
         $path = $this->generation_path_image();
         $this->save_image_in_local_storage($request->images, $path);
+        $this->increment_count_room($request->roomtype);
         return redirect()->back()->with(['success' => 'room added successfully']);
     }
 
@@ -91,6 +92,7 @@ class RoomController extends Controller
         $room = $this->findOrNot($request->room_id);
         if ($room) {
             $this->delete_from_databse_localStorage($room->images_id);
+            $this->decrement_count_room($request->room_type_id);
             return redirect()->back()->with(['delete' => 'Room Deleted successfully']);
         }
     }
@@ -98,15 +100,13 @@ class RoomController extends Controller
     public function change_status_room(Request $request)
     {
         $room = $this->findOrNot($request->room_id);
-        if($room)
-        {
+        if ($room) {
             $room->update([
                 'status' =>  $request->payment_status,
             ]);
 
-            return redirect()->back()->with(['success'=>'Status Changed Successfully']);
+            return redirect()->back()->with(['success' => 'Status Changed Successfully']);
         }
-
     }
 
 
@@ -218,5 +218,21 @@ class RoomController extends Controller
         Storage::disk('rooms')->deleteDirectory($image_id);
         $images_room = RoomImage::find($image_id);
         $images_room->delete();
+    }
+
+    private function increment_count_room($room_type_id)
+    {
+        $info_room_type = Roomtype::find($room_type_id);
+        $info_room_type->update([
+            'count_room' => $info_room_type->count_room++,
+        ]);
+    }
+
+    private function decrement_count_room($room_type_id)
+    {
+        $info_room_type = Roomtype::find($room_type_id);
+        $info_room_type->update([
+            'count_room' => $info_room_type->count_room--,
+        ]);
     }
 }

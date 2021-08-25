@@ -46,7 +46,7 @@ class RoomtypeSeeder extends Seeder
         ]);
         Roomtype::create([
             'type' => 'King',
-            'description'=> 'A room with a king-sized bed. May be occupied by one or more people',
+            'description'=> 'A room with a king-sized bed. May be occupied by one or   more people',
             'price' => '300',
 
         ]);

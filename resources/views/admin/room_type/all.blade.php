@@ -9,14 +9,14 @@
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 @endsection
 @section('title')
-    Rooms
+    Rooms Type
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Rooms</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
+                <h4 class="content-title mb-0 my-auto">Rooms Type</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ All
                 </span>
             </div>
         </div>
@@ -43,7 +43,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/room/add">Add Room</a>
+                        <a class="btn btn-outline-primary btn-block" href="/room_type/add">Add Room Type</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -55,6 +55,7 @@
                                     <th class="border-bottom-0">Type</th>
                                     <th class="border-bottom-0">description</th>
                                     <th class="border-bottom-0">Price</th>
+                                    <th class="border-bottom-0">Count Room</th>
                                     <th class="border-bottom-0">opertions</th>
                                 </tr>
                             </thead>
@@ -68,6 +69,7 @@
                                         <td>{{ $type->type }}</td>
                                         <td>{{ $type->description }}</td>
                                         <td>{{ $type->changeFormatPrice() }}</td>
+                                        <td>{{ $type->count_room }}</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button aria-expanded="false" aria-haspopup="true"
@@ -75,13 +77,23 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="">
+                                                    <a class="dropdown-item" href="/room_type/edit/{{ $type->id }}">
                                                         <i class="fas fa-edit text-primary"></i>
-                                                        Edit Room</a>
+                                                        Edit Room Type</a>
 
-                                                    <a class="dropdown-item" href="#delete_room" data-toggle="modal">
+                                                    <a class="dropdown-item" href="#delete_room" data-toggle="modal"
+                                                        data-id="{{ $type->id }}">
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
-                                                        Delete Room</a>
+                                                        Delete Room Type</a>
+
+
+
+                                                    <a class="dropdown-item" href="#Transfer_room_type" data-toggle="modal"
+                                                        data-target="#Transfer_room_type">
+                                                        <i class="text-warning fas fa-exchange-alt"></i>&nbsp;&nbsp;
+                                                        Archive Invoices
+                                                    </a>
+
                                                 </div>
                                             </div>
                                         </td>
@@ -104,21 +116,49 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"> Delete Room</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"> Delete Room Type</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room/delete" method="post">
+                    <form action="/room_type/delete" method="post">
                         @csrf
                         <div class="modal-body">
-                            Are You Sure for Delete Room With RoomId:
+                            Are You Sure for Delete Room Type:
                             <input type="text" name="room_id" id="room_id" value="" readonly>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
                             <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        {{-- Archive Room type --}}
+
+        <div class="modal fade" id="Transfer_room_type" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Archive Room Type</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/invoices/addArchive" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            Are You Sure for Archive Room Type
+                            <input type="hidden" name="" id="" value="">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                            <button type="submit" class="btn btn-primary">Archive</button>
                         </div>
                     </form>
                 </div>
@@ -156,15 +196,6 @@
 
     <script>
         $('#delete_room').on('show.bs.modal', function(e) {
-            var button = $(e.relatedTarget);
-            var room_id = button.data('id');
-
-            var modal = $(this);
-            modal.find('.modal-body #room_id').val(room_id);
-        });
-
-
-        $('#room_status').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
             var room_id = button.data('id');
 

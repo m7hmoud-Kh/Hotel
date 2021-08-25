@@ -84,7 +84,9 @@
                                                         Edit Room</a>
 
                                                     <a class="dropdown-item" href="#delete_room" data-toggle="modal"
-                                                        data-id="{{ $room->id }}">
+                                                        data-id="{{ $room->id }}"
+                                                        data-room_type_id="{{$room->roomtype->id}}"
+                                                        >
                                                         <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;
                                                         Delete Room</a>
 
@@ -129,6 +131,7 @@
                         <div class="modal-body">
                             Are You Sure for Delete Room With RoomId:
                             <input type="text" name="room_id" id="room_id" value="" readonly>
+                            <input type="hidden" name="room_type_id" id="room_type_id" value="">
 
                         </div>
                         <div class="modal-footer">
@@ -218,9 +221,12 @@
         $('#delete_room').on('show.bs.modal', function(e) {
             var button = $(e.relatedTarget);
             var room_id = button.data('id');
+            var room_type_id = button.data('room_type_id');
 
             var modal = $(this);
             modal.find('.modal-body #room_id').val(room_id);
+            modal.find('.modal-body #room_type_id').val(room_type_id);
+
         });
 
 

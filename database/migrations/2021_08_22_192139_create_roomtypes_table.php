@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateRoomtypesTable extends Migration
 {
+    use SoftDeletes;
     /**
      * Run the migrations.
      *
@@ -18,6 +20,8 @@ class CreateRoomtypesTable extends Migration
             $table->string('type',100);
             $table->text('description');
             $table->decimal('price');
+            $table->integer('count_room')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

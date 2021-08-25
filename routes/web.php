@@ -60,5 +60,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'room_type'], function () {
         Route::get('/all', [TYPE_ROOM, 'index']);
+        Route::get('/add',[TYPE_ROOM,'add']);
+        Route::post('/store',[TYPE_ROOM,'store']);
+        Route::get('/edit/{id}',[TYPE_ROOM,'edit']);
+        Route::post('/update',[TYPE_ROOM,'update']);
+        Route::post('/delete',[TYPE_ROOM,'delete']);
+
     });
 });
