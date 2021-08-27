@@ -1,6 +1,6 @@
 @extends('layouts.master2')
 @section('title')
-    users
+    Admin Login
 @stop
 
 @section('css')
@@ -33,8 +33,8 @@
                                     <div class="card-sigin">
                                         <div class="main-signup-header">
                                             <h2>Welcome</h2>
-                                            <h5 class="font-weight-semibold mb-4">sign in </h5>
-                                            <form method="POST" action="{{ route('login') }}">
+                                            <h5 class="font-weight-semibold mb-4">sign in Dashbord</h5>
+                                            <form method="POST" action="{{ route('admin.login') }}">
                                                 @csrf
                                                 <div class="form-group">
                                                     <label>Email</label>

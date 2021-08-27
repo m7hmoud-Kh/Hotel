@@ -54,7 +54,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/room_type/all">Back to Room Type</a>
+                        <a class="btn btn-outline-primary btn-block" href="/admin/room_type/all">Back to Room Type</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -128,7 +128,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room_type/delete_archive" method="post">
+                    <form action="/admin/room_type/delete_archive" method="post">
                         @csrf
                         <div class="modal-body">
                             Are You Sure for Delete Room Type:
@@ -157,7 +157,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room_type/cancel_archive" method="post">
+                    <form action="/admin/room_type/cancel_archive" method="post">
                         @csrf
                         <div class="modal-body">
                             Are You Sure for cancel Archive Room Type

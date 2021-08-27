@@ -43,7 +43,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/room/add">Add Room</a>
+                        <a class="btn btn-outline-primary btn-block" href="/admin/room/add">Add Room</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -79,7 +79,7 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="/room/edit/{{ $room->id }}">
+                                                    <a class="dropdown-item" href="/admin/room/edit/{{ $room->id }}">
                                                         <i class="fas fa-edit text-primary"></i>
                                                         Edit Room</a>
 
@@ -126,7 +126,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/room/delete" method="post">
+                    <form action="/admin/room/delete" method="post">
                         @csrf
                         <div class="modal-body">
                             Are You Sure for Delete Room With RoomId:
@@ -154,7 +154,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="/room/change_status_room" method="post">
+                <form action="/admin/room/change_status_room" method="post">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" value="" id="room_id" name="room_id">

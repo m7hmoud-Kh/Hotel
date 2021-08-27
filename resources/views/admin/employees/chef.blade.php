@@ -43,7 +43,7 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block" href="/employees/add">Add Employee</a>
+                        <a class="btn btn-outline-primary btn-block" href="/admin/employees/add">Add Employee</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -80,7 +80,7 @@
                                                     type="button">Operation<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
 
-                                                    <a class="dropdown-item" href="/employees/edit/{{$employee->id}}"> <i
+                                                    <a class="dropdown-item" href="/admin/employees/edit/{{$employee->id}}"> <i
                                                             class="fas fa-edit text-primary"></i>
                                                         Edit Employee</a>
 
@@ -116,7 +116,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="/employees/delete" method="post">
+                    <form action="/admin/employees/delete" method="post">
                         @csrf
                         <div class="modal-body">
                             <input type="hidden" name="employee_id" id="employee_id" value="">

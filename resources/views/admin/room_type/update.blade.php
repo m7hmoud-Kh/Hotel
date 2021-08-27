@@ -68,7 +68,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="/room_type/update" method="POST">
+                    <form action="/admin/room_type/update" method="POST">
                         @csrf
                         {{-- 2 --}}
                         <div class="row">

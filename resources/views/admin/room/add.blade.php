@@ -68,7 +68,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="/room/store" method="POST" enctype="multipart/form-data">
+                    <form action="/admin/room/store" method="POST" enctype="multipart/form-data">
                         @csrf
                         {{-- 2 --}}
                         <div class="row">
@@ -173,7 +173,7 @@
                 var id = $(this).val();
                 $.ajax({
                     type: "GET",
-                    url: "{{ URL::to('/room/type_info') }}/" + id,
+                    url: "{{ URL::to('/admin/room/type_info') }}/" + id,
                     data: "json",
                     success: function(response) {
                         $('#price').val(response['price']);

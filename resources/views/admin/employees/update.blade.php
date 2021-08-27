@@ -60,7 +60,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="/employees/update" method="post" enctype="multipart/form-data">
+                    <form action="/admin/employees/update" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col">
