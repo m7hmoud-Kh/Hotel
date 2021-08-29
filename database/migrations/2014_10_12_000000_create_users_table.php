@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->enum('status',[1,2])->comment('1=>not reservation , 2=> reservation')->default(1);
             $table->timestamps();
         });
     }

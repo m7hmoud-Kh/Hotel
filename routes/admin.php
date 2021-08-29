@@ -9,22 +9,23 @@ define('ROOM', App\Http\Controllers\Admin\RoomController::class);
 define('TYPE_ROOM', App\Http\Controllers\Admin\RoomTypeController::class);
 define('ROOM_STATUS', App\Http\Controllers\Admin\RoomStatusController::class);
 define('DASH', App\Http\Controllers\Admin\DashbordController::class);
+define('CLIENT', App\Http\Controllers\Admin\ClientController::class);
+
+
 
 
 
 
 
 Route::group(['prefix' => 'admin'], function () {
-
     Route::get('/login', [ADMIN, 'showLoginForm']);
     Route::post('/login', [ADMIN, 'login'])->name('admin.login');
 });
 
 Route::group(['middleware' => 'assign.guard:admin,admin/login'], function () {
 
-
     //Dasbord Controller
-    Route::get('admin/dashbord',[DASH,'index']);
+    Route::get('admin/dashbord', [DASH, 'index']);
 
     //Room Controller
     Route::group(['prefix' => 'admin/room'], function () {
@@ -76,4 +77,12 @@ Route::group(['middleware' => 'assign.guard:admin,admin/login'], function () {
         Route::get('/chefs', [EMP, 'chefs']);
     });
 
+
+    //CLientController
+    Route::group(['prefix' => 'admin/client'], function () {
+
+        Route::get('/all',[CLIENT,'all']);
+        Route::post('/delete',[CLIENT,'delete']);
+
+    });
 });

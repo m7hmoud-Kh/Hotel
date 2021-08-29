@@ -41,4 +41,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+
+    public function getStatusAttribute($val)
+    {
+        switch ($val) {
+            case 1:
+                return  '<p class="text-danger">Haven\'t Room</p>';
+            case 2:
+                return '<p class="text-success">Have Room</P>';
+            default:
+                # code...
+                break;
+        }
+    }
 }
